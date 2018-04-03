@@ -10,7 +10,7 @@
     background-color: grey;
 }
 </style>
-    <title>My page title</title>
+    <title>Vind de Zombies</title>
   </head>
   <body>
   My zombie
@@ -18,6 +18,7 @@
 
 <script>
     var zombie_map;
+    var old_position;
     var all_markers = [];
     var data = `52.21769542391267 0.21518378906250746 zombie.png 
 52.188658859826695 0.19595771484375746 hospital.png 
@@ -28,11 +29,17 @@
 52.193920514214106 0.13415961914063246 weapons.png 
 52.204652358264354 0.1303830688476637 zombie.png `;
     var markers = data.split("\n");
+    
     function initMap() {
             zombie_map = new google.maps.Map(document.getElementById('zombie_map'), {
             zoom: 12,
             center: {lat: 52.206727, lng: 0.124450}
-        });         
+        });
+
+     old_position = new google.maps.Marker({
+        position: {lat: 52.206727, lng: 0.124450},
+        map: zombie_map,
+        });            
 
     for (var i = 0; i < markers.length; i++) {
             var marker_data = markers[i].trim();
@@ -56,12 +63,15 @@ else {
     alert("Geolocation doesn't work in your browser");
 }
     function set_my_position(position) {
+    old_position.setMap(null);
       var pos = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
       var marker = new google.maps.Marker({
                 position: pos,
                 map: zombie_map,
                 icon: emoji
             });
+
+      old_position = marker;
     }
 
     }
